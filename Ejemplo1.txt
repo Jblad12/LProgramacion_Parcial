@@ -1,0 +1,13 @@
+ALGORITMO fibonacciRecursivo(NULL):
+{
+	clase estudiante{ 
+		
+		fu=5;
+		
+	}
+	b=5;
+
+	
+}
+.
+ 
