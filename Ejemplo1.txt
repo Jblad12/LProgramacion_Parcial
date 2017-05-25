@@ -5,12 +5,19 @@ a=5;
 	#}
 	#clase estudiante{
 		a = 3;
-		imprimirPantalla(a);
+		imprimirPantalla("hola");
 	#}
 	
 	v = 2;
 	imprimirPantalla(v);
 }
 .
+
+	a=4;
+	clase a{
+	imprimirPantalla(2);
+	}
+	f=2;
+
  
 

@@ -83,6 +83,12 @@ public interface DiunisioVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBloque(DiunisioParser.BloqueContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link DiunisioParser#bloqueclases}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBloqueclases(DiunisioParser.BloqueclasesContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link DiunisioParser#decl_clases}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

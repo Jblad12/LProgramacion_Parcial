@@ -86,6 +86,8 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     public Valor visitBloque(DiunisioParser.BloqueContext ctx) {
         if(ctx.sec_proposiciones() != null)
             return this.visit(ctx.sec_proposiciones());
+        else if (ctx.bloqueclases()!=null)
+        	return this.visit(ctx.bloqueclases());
         else
             return new Valor(null);
     }
