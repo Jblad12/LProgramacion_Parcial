@@ -172,18 +172,6 @@ public class DiunisioBaseListener implements DiunisioListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMetodos(DiunisioParser.MetodosContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMetodos(DiunisioParser.MetodosContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSec_proposiciones(DiunisioParser.Sec_proposicionesContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -323,18 +311,6 @@ public class DiunisioBaseListener implements DiunisioListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPara_senten(DiunisioParser.Para_sentenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEstruc_control(DiunisioParser.Estruc_controlContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEstruc_control(DiunisioParser.Estruc_controlContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

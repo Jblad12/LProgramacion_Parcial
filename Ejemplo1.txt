@@ -1,13 +1,16 @@
-ALGORITMO fibonacciRecursivo(NULL):
-{
-	clase estudiante{ 
-		
-		fu=5;
-		
-	}
-	b=5;
-
+ALGORITMO fibonacciRecursivo(NULL):{
+a=5;
+	#clase carro{
+		imprimirPantalla(2);
+	#}
+	#clase estudiante{
+		a = 3;
+		imprimirPantalla(a);
+	#}
 	
+	v = 2;
+	imprimirPantalla(v);
 }
 .
  
+

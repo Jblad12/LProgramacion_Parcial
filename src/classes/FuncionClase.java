@@ -1,13 +1,12 @@
 package classes;
 
+import java.util.ArrayList;
 
-
-//Clase que almacenara funciones y procedimientos
+//Clase que almacenara las clases
 public class FuncionClase extends Valor {
-    
+	public ArrayList<String> parametros = new ArrayList<>();
     public String tipoClase;
-    public DiunisioParser.Sec_proposicionesContext sec_proposicionesContext;
-    
+    public DiunisioParser.BloqueContext bloque;
     //Constructor
     public FuncionClase(Object value){
         super(value);

@@ -138,16 +138,6 @@ public interface DiunisioListener extends ParseTreeListener {
 	 */
 	void exitDecl_clases(DiunisioParser.Decl_clasesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DiunisioParser#metodos}.
-	 * @param ctx the parse tree
-	 */
-	void enterMetodos(DiunisioParser.MetodosContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DiunisioParser#metodos}.
-	 * @param ctx the parse tree
-	 */
-	void exitMetodos(DiunisioParser.MetodosContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link DiunisioParser#sec_proposiciones}.
 	 * @param ctx the parse tree
 	 */
@@ -275,16 +265,6 @@ public interface DiunisioListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPara_senten(DiunisioParser.Para_sentenContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link DiunisioParser#estruc_control}.
-	 * @param ctx the parse tree
-	 */
-	void enterEstruc_control(DiunisioParser.Estruc_controlContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DiunisioParser#estruc_control}.
-	 * @param ctx the parse tree
-	 */
-	void exitEstruc_control(DiunisioParser.Estruc_controlContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DiunisioParser#fun_senten}.
 	 * @param ctx the parse tree

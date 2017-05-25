@@ -89,12 +89,6 @@ public interface DiunisioVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDecl_clases(DiunisioParser.Decl_clasesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link DiunisioParser#metodos}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMetodos(DiunisioParser.MetodosContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link DiunisioParser#sec_proposiciones}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -170,12 +164,6 @@ public interface DiunisioVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPara_senten(DiunisioParser.Para_sentenContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link DiunisioParser#estruc_control}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEstruc_control(DiunisioParser.Estruc_controlContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DiunisioParser#fun_senten}.
 	 * @param ctx the parse tree

@@ -1,9 +1,9 @@
 //Nombre del lenguaje: Diunisio
 grammar Diunisio;
 
-//Simbolo inicial
+//Símbolo inicial
 algoritmo
- : ALGORITMO IDENTIFICADOR (PAREN_AP lista_ids PAREN_CI)? DOSPUNTOS bloque* TERMINA
+ : ALGORITMO IDENTIFICADOR (PAREN_AP lista_ids PAREN_CI)? DOSPUNTOS bloque TERMINA
  ;
 
 //Lista de identificadores
@@ -11,7 +11,6 @@ lista_ids
  : IDENTIFICADOR (COMA IDENTIFICADOR)*
  |
  ;
-
 
 //Expresiones simples
 exp_simple
@@ -29,13 +28,13 @@ expresion
  | NO expresion
  ;
 
-//Definicion de variable
+//Definición de variable
 variable
  : IDENTIFICADOR conjunto
  | IDENTIFICADOR
  ;
 
-//Definicion de termino
+//Definición de término
 termino
  : PAREN_AP termino PAREN_CI
  | factor (op=(MULT | DIV | MOD | Y | O | POTENCIA) factor)*
@@ -43,7 +42,7 @@ termino
  | factor
  ;
 
-//Definicion de factor
+//Definición de factor
 factor
  : ENTERO
  | REAL
@@ -61,13 +60,13 @@ factor
  | PAREN_AP expresion PAREN_CI
  ;
 
-//Lista de parametros
+//Lista de parámetros
 lista_parsv
  : PAREN_AP (expresion | variable | IDENTIFICADOR) (COMA (expresion | variable | IDENTIFICADOR ))* PAREN_CI
  | PAREN_AP PAREN_CI
  ;
 
-//Definicion de conjunto
+//Definición de conjunto
 conjunto
  : LLAVEIZ (expresion (COMA expresion)*)? LLAVEDE
  ;
@@ -76,7 +75,6 @@ conjunto
 tipo
  : INT | FLOAT | STRING | BOOL | MATRIZ | VECTOR
  ;
-
 tipoclase
  : CLASE
  ;
@@ -84,30 +82,19 @@ tipoclase
 //Bloque
 bloque
  : LLAVEIZ LLAVEDE
- | LLAVEIZ decl_clases LLAVEDE
  | LLAVEIZ sec_proposiciones LLAVEDE
+ | LLAVEIZ (sec_proposiciones)* ((decl_clases)* sec_proposiciones)*  LLAVEDE
  ;
-
  
- 
- //declaracion de clases
-decl_clases
-: CLASE nameClass  '{'  sec_proposiciones  '}' 
-;
-nameClass
- : IDENTIFICADOR
- ;
+ decl_clases
+  :  CLASE IDENTIFICADOR '{' sec_proposiciones '}'
+  ;
+  
 
-metodos
-: SET IDENTIFICADOR PAREN_AP PAREN_CI LLAVEIZ asignacion LLAVEDE PCOMA 
-| GET IDENTIFICADOR PAREN_AP PAREN_CI LLAVEIZ RETORNAR IDENTIFICADOR  LLAVEDE PCOMA 
-| metodos estruc_control
-;
-//Secuenciacion
+//Secuenciación
 sec_proposiciones
  : (proposicion)* proposicion
  ;
-
 
 //Conjunto de posibles sentencias
 proposicion
@@ -120,40 +107,38 @@ proposicion
  | para_senten
  | hacer_mientras_senten
  | asignacion PCOMA
- | IDENTIFICADOR lista_parsv PCOMA //Llamar funcion o procedimiento
+ | IDENTIFICADOR lista_parsv PCOMA //Llamar función o procedimiento
  | LLAVEIZ sec_proposiciones LLAVEDE
  | OTRO {System.err.println("Caracter desconocido: " + $OTRO.text);}
  ;
- 
 
-
-//Modo de asignacion
+//Modo de asignación
 asignacion
  : IDENTIFICADOR ASIGNAR expresion  #asigNum
  | IDENTIFICADOR ASIGNAR conjunto   #asigVec
  ;
 
-//Seleccion IF
+//Selección IF
 si_senten
  : SI bloque_condicional (SI_NO SI bloque_condicional)* (SI_NO ENTONCES? bloque)?
  ;
 
-//Expresion a evaluar y bloque de sentencias a ejecutar
+//Expresión a evaluar y bloque de sentencias a ejecutar
 bloque_condicional
  : expresion ENTONCES? bloque
  ;
 
-//Iteracion WHILE
+//Iteración WHILE
 mientras_senten
  : MIENTRAS bloque_condicional
  ;
 
-//Iteracion DO WHILE
+//Iteración DO WHILE
 hacer_mientras_senten
  : HACER bloque MIENTRAS expresion
  ;
 
-//Seleccion SWITCH
+//Selección SWITCH
 seleccionar_senten
  : SELECCIONAR IDENTIFICADOR LLAVEIZ casos LLAVEDE
  ;
@@ -164,22 +149,13 @@ casos
  | DEFECTO DOSPUNTOS sec_proposiciones                                  #casosDef
  ;
 
-//Iteracion FOR
+//Iteración FOR
 para_senten
  : PARA asignacion (COMA asignacion)* PCOMA expresion PCOMA asignacion (COMA asignacion)* bloque
  | PARA PAREN_AP asignacion (COMA asignacion)* PCOMA expresion PCOMA asignacion (COMA asignacion)* PAREN_CI bloque
  ;
-//estructuras de control
-estruc_control
-: si_senten
-| bloque_condicional
-| mientras_senten
-| hacer_mientras_senten
-| seleccionar_senten
-| para_senten
-;
 
-//Funcion
+//Función
 fun_senten
  : DEF tipo IDENTIFICADOR PAREN_AP lista_ids PAREN_CI bloque
  ;
@@ -189,7 +165,7 @@ proc_senten
  : DEF IDENTIFICADOR PAREN_AP lista_ids PAREN_CI bloque
  ;
 
-//Sentencias de funciÃ³n
+//Sentencias de función
 funcion
  : LLAVEIZ sec_proposiciones PCOMA LLAVEDE
  ;
@@ -214,8 +190,6 @@ DIV : '/';
 MOD : '%';
 POTENCIA : '^';
 NO : '!';
-SET : 'set';
-GET : 'get';
 DEF : 'def';
 RETORNAR : 'retornar';
 INT : 'entero';
