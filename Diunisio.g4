@@ -83,12 +83,9 @@ tipoclase
 bloque
  : LLAVEIZ LLAVEDE
  | LLAVEIZ sec_proposiciones LLAVEDE
- | LLAVEIZ bloqueclases LLAVEDE 
+ | LLAVEIZ (decl_clases)* (proposicion)+ LLAVEDE 
  ;
  
- bloqueclases
- : decl_clases* proposicion*
- ;
  
  decl_clases
   :  CLASE IDENTIFICADOR LLAVEIZ proposicion LLAVEDE
