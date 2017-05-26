@@ -128,16 +128,6 @@ public interface DiunisioListener extends ParseTreeListener {
 	 */
 	void exitBloque(DiunisioParser.BloqueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DiunisioParser#bloqueclases}.
-	 * @param ctx the parse tree
-	 */
-	void enterBloqueclases(DiunisioParser.BloqueclasesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DiunisioParser#bloqueclases}.
-	 * @param ctx the parse tree
-	 */
-	void exitBloqueclases(DiunisioParser.BloqueclasesContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link DiunisioParser#decl_clases}.
 	 * @param ctx the parse tree
 	 */

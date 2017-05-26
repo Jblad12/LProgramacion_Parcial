@@ -160,18 +160,6 @@ public class DiunisioBaseListener implements DiunisioListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBloqueclases(DiunisioParser.BloqueclasesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBloqueclases(DiunisioParser.BloqueclasesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterDecl_clases(DiunisioParser.Decl_clasesContext ctx) { }
 	/**
 	 * {@inheritDoc}
