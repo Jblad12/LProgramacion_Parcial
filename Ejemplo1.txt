@@ -1,10 +1,15 @@
 ALGORITMO fibonacciRecursivo(NULL):{
 
 	clase nueva{ 
-	a=6+7;
-	imprimirPantalla(a);
-	imprimirPantalla("hola");
-	imprimirPantalla("hola1");
+		a=6+7;
+		b=3+10;
+		imprimirPantalla(a);
+		si(a > b){
+			imprimirPantalla(a);
+		}si_no{
+			imprimirPantalla(a+3);
+		}
+		
 	}
 	imprimirPantalla("hola2");
 
