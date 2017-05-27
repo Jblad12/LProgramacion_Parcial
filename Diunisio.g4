@@ -5,7 +5,7 @@ grammar Diunisio;
 algoritmo
  : ALGORITMO IDENTIFICADOR (PAREN_AP lista_ids PAREN_CI)? DOSPUNTOS bloque TERMINA
  ;
-
+	
 //Lista de identificadores
 lista_ids
  : IDENTIFICADOR (COMA IDENTIFICADOR)*
@@ -85,12 +85,11 @@ bloque
  | LLAVEIZ sec_proposiciones LLAVEDE
  | LLAVEIZ (decl_clases)* (proposicion)+ LLAVEDE 
  ;
- 
- 
- decl_clases
-  :  CLASE IDENTIFICADOR LLAVEIZ proposicion LLAVEDE
-  ;
   
+ decl_clases
+  :  tipoclase IDENTIFICADOR LLAVEIZ sec_proposiciones LLAVEDE
+  ;
+ 
 
 //Secuenciación
 sec_proposiciones

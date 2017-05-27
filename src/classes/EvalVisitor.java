@@ -84,12 +84,14 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     //Visitor de las producciones de Bloque
     @Override
     public Valor visitBloque(DiunisioParser.BloqueContext ctx) {
-        if(ctx.sec_proposiciones() != null){
+    	 if (ctx.decl_clases() !=null){
+    		 
+         	return this.visitDecl_clases(ctx.decl_clases(0));
+         	}
+    	else if(ctx.sec_proposiciones() != null){
+        	//System.out.println("Una proposicion");
         	return this.visit(ctx.sec_proposiciones());}
-        else if (ctx.decl_clases() !=null){
-        	System.out.println("soy una clase");
-        	return new Valor(null);
-        	}
+       
         else
             return new Valor(null);
     }
@@ -930,10 +932,13 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor((double) (lnr.getLineNumber()));
     }
    @Override
-public Valor visitDecl_clases(Decl_clasesContext ctx) {
-	   String nuevo = ctx.CLASE().getText();
-	   System.out.println("asjfladj");
-	return super.visitDecl_clases(ctx);
+public Valor visitDecl_clases(DiunisioParser.Decl_clasesContext ctx) {
+	   FuncionClase clase = new FuncionClase(null);
+	   HashMap<String, Valor> memoria = globales;
+      memoria.put(ctx.IDENTIFICADOR().getText(), clase);
+      
+      return this.visit(ctx.sec_proposiciones());
+	   
 } 
 
 }

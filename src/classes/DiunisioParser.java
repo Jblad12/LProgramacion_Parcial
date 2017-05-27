@@ -1363,11 +1363,13 @@ public class DiunisioParser extends Parser {
 	}
 
 	public static class Decl_clasesContext extends ParserRuleContext {
-		public TerminalNode CLASE() { return getToken(DiunisioParser.CLASE, 0); }
+		public TipoclaseContext tipoclase() {
+			return getRuleContext(TipoclaseContext.class,0);
+		}
 		public TerminalNode IDENTIFICADOR() { return getToken(DiunisioParser.IDENTIFICADOR, 0); }
 		public TerminalNode LLAVEIZ() { return getToken(DiunisioParser.LLAVEIZ, 0); }
-		public ProposicionContext proposicion() {
-			return getRuleContext(ProposicionContext.class,0);
+		public Sec_proposicionesContext sec_proposiciones() {
+			return getRuleContext(Sec_proposicionesContext.class,0);
 		}
 		public TerminalNode LLAVEDE() { return getToken(DiunisioParser.LLAVEDE, 0); }
 		public Decl_clasesContext(ParserRuleContext parent, int invokingState) {
@@ -1396,13 +1398,13 @@ public class DiunisioParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(224);
-			match(CLASE);
+			tipoclase();
 			setState(225);
 			match(IDENTIFICADOR);
 			setState(226);
 			match(LLAVEIZ);
 			setState(227);
-			proposicion();
+			sec_proposiciones();
 			setState(228);
 			match(LLAVEDE);
 			}
@@ -2645,8 +2647,8 @@ public class DiunisioParser extends Parser {
 		"\2\2\u00d9\u00db\5\36\20\2\u00da\u00d9\3\2\2\2\u00db\u00dc\3\2\2\2\u00dc"+
 		"\u00da\3\2\2\2\u00dc\u00dd\3\2\2\2\u00dd\u00de\3\2\2\2\u00de\u00df\7#"+
 		"\2\2\u00df\u00e1\3\2\2\2\u00e0\u00cc\3\2\2\2\u00e0\u00ce\3\2\2\2\u00e0"+
-		"\u00d2\3\2\2\2\u00e1\31\3\2\2\2\u00e2\u00e3\7\64\2\2\u00e3\u00e4\7\65"+
-		"\2\2\u00e4\u00e5\7\"\2\2\u00e5\u00e6\5\36\20\2\u00e6\u00e7\7#\2\2\u00e7"+
+		"\u00d2\3\2\2\2\u00e1\31\3\2\2\2\u00e2\u00e3\5\26\f\2\u00e3\u00e4\7\65"+
+		"\2\2\u00e4\u00e5\7\"\2\2\u00e5\u00e6\5\34\17\2\u00e6\u00e7\7#\2\2\u00e7"+
 		"\33\3\2\2\2\u00e8\u00ea\5\36\20\2\u00e9\u00e8\3\2\2\2\u00ea\u00ed\3\2"+
 		"\2\2\u00eb\u00e9\3\2\2\2\u00eb\u00ec\3\2\2\2\u00ec\u00ee\3\2\2\2\u00ed"+
 		"\u00eb\3\2\2\2\u00ee\u00ef\5\36\20\2\u00ef\35\3\2\2\2\u00f0\u00f1\7\27"+

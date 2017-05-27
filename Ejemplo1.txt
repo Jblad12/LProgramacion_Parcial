@@ -1,14 +1,15 @@
 ALGORITMO fibonacciRecursivo(NULL):{
 
-	clase a{ 
-	a=6;
-	}
-	
+	clase nueva{ 
+	a=6+7;
+	imprimirPantalla(a);
 	imprimirPantalla("hola");
-	
+	imprimirPantalla("hola1");
+	}
+	imprimirPantalla("hola2");
+
 }
 .
 
 
  
-
