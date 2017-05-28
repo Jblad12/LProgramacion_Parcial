@@ -1,18 +1,9 @@
-ALGORITMO fibonacciRecursivo(NULL):{
-
+ALGORITMO fibonacciRecursivo(NULL):
+{
 	clase nueva{ 
-		a=6+7;
-		b=3+10;
-		imprimirPantalla(a);
-		si(a > b){
-			imprimirPantalla(a);
-		}si_no{
-			imprimirPantalla(a+3);
-		}
-		
-	}
-	imprimirPantalla("hola2");
-
+		a=2;
+	}_
+	imprimirPantalla("hola2");	
 }
 .
 

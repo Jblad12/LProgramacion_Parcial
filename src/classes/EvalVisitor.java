@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import javax.xml.crypto.AlgorithmMethod;
+
+import org.omg.CORBA.CTX_RESTRICT_SCOPE;
+
 import classes.DiunisioParser.Decl_clasesContext;
 
 
@@ -60,7 +64,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     //Visitor de las producciones de la Secuencia de Proposiciones
     @Override
     public Valor visitSec_proposiciones(DiunisioParser.Sec_proposicionesContext ctx) {
-        for (DiunisioParser.ProposicionContext propCtx : ctx.proposicion()) {
+    	for (DiunisioParser.ProposicionContext propCtx : ctx.proposicion()) {
             //Si encuentra la sentencia RETORNAR, retorna la variable adjunta
             if (propCtx.RETORNAR() != null) {
                 variable = this.visit(propCtx.expresion());
@@ -84,16 +88,19 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     //Visitor de las producciones de Bloque
     @Override
     public Valor visitBloque(DiunisioParser.BloqueContext ctx) {
-    	 
-    	if(ctx.sec_proposiciones() != null){
-        	//System.out.println("Una proposicion");
-        	return this.visit(ctx.sec_proposiciones());}
-    	if (ctx.decl_clases() !=null){
-   		 
-         	return this.visitDecl_clases(ctx.decl_clases(0));
+   	 	if(ctx.sec_proposiciones() != null){
+   	 		System.out.println("SEC_proposiciones");
+        	return this.visit(ctx.sec_proposiciones());
+   	 	
+        	}
+   	 	   	 	else if (ctx.decl_clases() !=null){
+    		System.out.println("una clase");
+    		return this.visitDecl_clases(ctx.decl_clases(0));
          	}
-        else
+    	else
             return new Valor(null);
+    		
+    		//return this.visit(ctx.sec_proposiciones());
     }
 
     //Visitor de las producciones del Bloque de la Funcion
@@ -933,11 +940,17 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     }
    @Override
 public Valor visitDecl_clases(DiunisioParser.Decl_clasesContext ctx) {
+	   String  au  = ctx.FINCLASE().getText();
+	   System.out.println("terminador de clase " + au);
 	   FuncionClase clase = new FuncionClase(null);
+	   
 	   HashMap<String, Valor> memoria = globales;
       memoria.put(ctx.IDENTIFICADOR().getText(), clase);
+      //System.out.println("desarrollo de la clase");
+       
+    
       return this.visitSec_proposiciones(ctx.sec_proposiciones());
-	   
+	   //return this.visit(ctx.sec_proposiciones());    
 } 
 
 }

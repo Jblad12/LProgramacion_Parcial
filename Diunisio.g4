@@ -83,11 +83,11 @@ tipoclase
 bloque
  : LLAVEIZ LLAVEDE
  | LLAVEIZ sec_proposiciones LLAVEDE
- | LLAVEIZ (decl_clases)* (proposicion)+ LLAVEDE 
+ | LLAVEIZ (decl_clases)* (proposicion)* proposicion LLAVEDE
  ;
   
  decl_clases
-  :  tipoclase IDENTIFICADOR LLAVEIZ sec_proposiciones LLAVEDE
+  :  tipoclase IDENTIFICADOR LLAVEIZ sec_proposiciones LLAVEDE FINCLASE
   ;
  
 
@@ -207,6 +207,7 @@ LLAVEDE : '}';
 ANGIZ : '[';
 ANGDE : ']';
 COMA : ',';
+FINCLASE: '_';
 DOSPUNTOS : ':';
 VERDADERO : 'verdadero';
 FALSO : 'falso';
