@@ -113,7 +113,7 @@ proposicion
  | OTRO {System.err.println("Caracter desconocido: " + $OTRO.text);}
  ;
  asigvar
-  : IDENTIFICADOR '.' IDENTIFICADOR '=' expresion ';'
+  : IDENTIFICADOR '=' expresion ';'
   ;
 
 

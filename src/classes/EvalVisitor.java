@@ -3,13 +3,16 @@ package classes;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import javax.imageio.stream.MemoryCacheImageInputStream;
 import javax.xml.crypto.AlgorithmMethod;
 
+import org.antlr.v4.parse.ANTLRParser.parserRule_return;
 import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 
 import classes.DiunisioParser.AsigvarContext;
@@ -24,7 +27,10 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     //Tablas de simbolos: Globales y Locales (por el alcance)
     private HashMap<String, Valor> globales = new HashMap<>();
     private HashMap<Integer, HashMap<String, Valor>> locales = new HashMap<>();
-
+  
+  private String nombreClase = null;
+  
+  
     private int alcanceActual = 0;
     private HashMap<Integer, String> casos = new HashMap<>();
     private boolean retornar = false;
@@ -88,14 +94,11 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
    
     @Override
     public Valor visitDecl_clases(DiunisioParser.Decl_clasesContext ctx) {
-    	   String  au  = ctx.FINCLASE().getText();
+    	  nombreClase =ctx.IDENTIFICADOR().getText();
+    	  
+    	  System.out.println(ctx.sec_proposiciones());
     	   FuncionClase clase = new FuncionClase(null);
-    	   HashMap<String, Valor> memoria = globales;
-          memoria.put(ctx.IDENTIFICADOR().getText(), clase);	
-          
-         //  System.out.println(ctx.sec_proposiciones().getText());
-        //  System.out.println("terminador de clase " + au);
-          
+    	             
           this.visitSec_proposiciones(ctx.sec_proposiciones());
         //  System.out.println(ctx.getText());
     	  return new Valor(0);    
@@ -974,12 +977,37 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     @Override
     public Valor visitAsigvar(AsigvarContext ctx) {
     	
-    	String a = ctx.IDENTIFICADOR(0).getText();
-    	String b = ctx.IDENTIFICADOR(1).getText();
-    	//String c = ctx.expresion().children;
-    	System.out.println(a);
-    	System.out.println(b);
-    	return new Valor(null);
+    	String id1 = ctx.IDENTIFICADOR(0).getText();
+    	String id2 = ctx.IDENTIFICADOR(1).getText();
+    	Valor valor = this.visit(ctx.expresion());
+    	HashMap<String, Valor> mem;
+    	System.out.println(alcanceActual);
+        if ((encontrar(id1) == -1) ) {
+        	System.out.println(id1);
+            if (alcanceActual == 0){
+                mem = globales;
+            System.out.println(mem);
+            
+            }
+            else {
+                if(!locales.containsKey(alcanceActual))
+                    locales.put(alcanceActual, new HashMap<>());
+                mem = alcance();
+            }
+        }else {
+                mem = campo(encontrar(id1));
+            }
+            if (retornar) {
+                retornar = false;
+                
+                return mem.put(id1, variable);
+                
+            }
+            
+            return mem.put(id1, valor);
+            
     }
+
+
 
 }
