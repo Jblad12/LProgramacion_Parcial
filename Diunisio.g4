@@ -83,7 +83,7 @@ tipoclase
 bloque
  : LLAVEIZ LLAVEDE
  | LLAVEIZ sec_proposiciones LLAVEDE
- | LLAVEIZ (decl_clases)* (proposicion)* proposicion LLAVEDE
+ | LLAVEIZ (decl_clases)* proposicion* LLAVEDE
  ;
   
  decl_clases
@@ -107,10 +107,15 @@ proposicion
  | para_senten
  | hacer_mientras_senten
  | asignacion PCOMA
+ | asigvar
  | IDENTIFICADOR lista_parsv PCOMA //Llamar función o procedimiento
  | LLAVEIZ sec_proposiciones LLAVEDE
  | OTRO {System.err.println("Caracter desconocido: " + $OTRO.text);}
  ;
+ asigvar
+  : IDENTIFICADOR '.' IDENTIFICADOR '=' expresion ';'
+  ;
+
 
 //Modo de asignación
 asignacion

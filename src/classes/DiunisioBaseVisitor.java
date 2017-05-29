@@ -122,6 +122,13 @@ public class DiunisioBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitAsigvar(DiunisioParser.AsigvarContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAsigNum(DiunisioParser.AsigNumContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

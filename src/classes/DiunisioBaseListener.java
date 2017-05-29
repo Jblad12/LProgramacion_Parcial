@@ -196,6 +196,18 @@ public class DiunisioBaseListener implements DiunisioListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAsigvar(DiunisioParser.AsigvarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAsigvar(DiunisioParser.AsigvarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAsigNum(DiunisioParser.AsigNumContext ctx) { }
 	/**
 	 * {@inheritDoc}

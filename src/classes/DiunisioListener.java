@@ -158,6 +158,16 @@ public interface DiunisioListener extends ParseTreeListener {
 	 */
 	void exitProposicion(DiunisioParser.ProposicionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link DiunisioParser#asigvar}.
+	 * @param ctx the parse tree
+	 */
+	void enterAsigvar(DiunisioParser.AsigvarContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DiunisioParser#asigvar}.
+	 * @param ctx the parse tree
+	 */
+	void exitAsigvar(DiunisioParser.AsigvarContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code asigNum}
 	 * labeled alternative in {@link DiunisioParser#asignacion}.
 	 * @param ctx the parse tree

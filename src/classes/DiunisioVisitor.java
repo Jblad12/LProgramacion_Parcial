@@ -101,6 +101,12 @@ public interface DiunisioVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProposicion(DiunisioParser.ProposicionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link DiunisioParser#asigvar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAsigvar(DiunisioParser.AsigvarContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code asigNum}
 	 * labeled alternative in {@link DiunisioParser#asignacion}.
 	 * @param ctx the parse tree

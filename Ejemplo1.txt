@@ -2,8 +2,16 @@ ALGORITMO fibonacciRecursivo(NULL):
 {
 	clase nueva{ 
 		a=2;
+		imprimirPantalla(a);
 	}_
 	imprimirPantalla("hola2");	
+	f=3+a;
+	si (2<3){
+	imprimirPantalla(f);
+	}si_no{
+	imprimirPantalla("unal");
+	}
+	nu.a = 3;
 }
 .
 

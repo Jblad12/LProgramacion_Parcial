@@ -12,6 +12,7 @@ import javax.xml.crypto.AlgorithmMethod;
 
 import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 
+import classes.DiunisioParser.AsigvarContext;
 import classes.DiunisioParser.Decl_clasesContext;
 
 
@@ -20,7 +21,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
 
     private static final double VALOR_PEQUENO = 0.00000000001;
 
-    //Tablas de sÌmbolos: Globales y Locales (por el alcance)
+    //Tablas de simbolos: Globales y Locales (por el alcance)
     private HashMap<String, Valor> globales = new HashMap<>();
     private HashMap<Integer, HashMap<String, Valor>> locales = new HashMap<>();
 
@@ -33,7 +34,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     @Override
     public Valor visitAlgoritmo(DiunisioParser.AlgoritmoContext ctx) {
         Main.algoritmo = ctx.IDENTIFICADOR().getText();
-        //Recibe los par·metros obtenidos de la clase Main y los inicializa
+        //Recibe los parÂ´•etros obtenidos de la clase Main y los inicializa
         if(ctx.lista_ids().getChildCount() > 0 && Main.parametros != null){
             int numParametro = 0;
             for(int i = 0; i < ctx.lista_ids().getChildCount(); i++){
@@ -84,19 +85,42 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         }
         return new Valor(null);
     }
-
+   
+    @Override
+    public Valor visitDecl_clases(DiunisioParser.Decl_clasesContext ctx) {
+    	   String  au  = ctx.FINCLASE().getText();
+    	   FuncionClase clase = new FuncionClase(null);
+    	   HashMap<String, Valor> memoria = globales;
+          memoria.put(ctx.IDENTIFICADOR().getText(), clase);	
+          
+         //  System.out.println(ctx.sec_proposiciones().getText());
+        //  System.out.println("terminador de clase " + au);
+          
+          this.visitSec_proposiciones(ctx.sec_proposiciones());
+        //  System.out.println(ctx.getText());
+    	  return new Valor(0);    
+    } 
+    
+    
     //Visitor de las producciones de Bloque
     @Override
     public Valor visitBloque(DiunisioParser.BloqueContext ctx) {
    	 	if(ctx.sec_proposiciones() != null){
-   	 		System.out.println("SEC_proposiciones");
-        	return this.visit(ctx.sec_proposiciones());
-   	 	
-        	}
-   	 	   	 	else if (ctx.decl_clases() !=null){
-    		System.out.println("una clase");
-    		return this.visitDecl_clases(ctx.decl_clases(0));
-         	}
+   	 		return this.visit(ctx.sec_proposiciones());
+   	 	}
+   	 	else if (ctx.decl_clases() !=null){
+   	 		if(ctx.getText().equals(ctx.decl_clases(0).getText())){
+   	 	   		return this.visitDecl_clases(ctx.decl_clases(0));
+   	 	   	}
+   	 	   	else {
+   	 	   			this.	visitDecl_clases(ctx.decl_clases(0));
+   	 	   			for(int i=0;i<ctx.proposicion().size();i++){
+   	 	   			 this.visit(ctx.proposicion(i));
+   	 	   		}
+   	 	   		return new Valor(null);
+   	 	   	}  		
+        }
+   	 	  	 	
     	else
             return new Valor(null);
     		
@@ -118,11 +142,11 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     //Visitor de las producciones de un Factor
     @Override
     public Valor visitFactor(DiunisioParser.FactorContext ctx) {
-        //Si encuentra una expresiÛn la visita
+        //Si encuentra una expresiÈèÆ la visita
         if(ctx.expresion() != null) {
             return this.visit(ctx.expresion());
         }
-        //Si el valor es un n˙mero, lo retorna
+        //Si el valor es un nÓÄ≠ero, lo retorna
         if (ctx.ENTERO() != null || ctx.REAL() != null) {
             return new Valor(Double.valueOf(ctx.getText()));
         }
@@ -148,21 +172,21 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         else if (ctx.COMPLEJO() != null) {
             return new Valor(Complejo.parseComplejo(ctx.COMPLEJO().getText()));
         }
-        //Si el valor es una negaciÛn, la retorna
+        //Si el valor es una negaciÈèÆ, la retorna
         else if (ctx.NO() != null) {
             return new Valor(!this.visit(ctx.factor(0)).aBoolean());
         }
-        //Si tiene una lista de par·metros, entonces es una funciÛn
+        //Si tiene una lista de parÂ´•etros, entonces es una funciÈèÆ
         else if (ctx.lista_parsv() != null) {
             Valor aux = this.visit(ctx.lista_parsv().expresion(0));
 
-            //FunciÛn para saber el tamaÒo de un conjunto
+            //FunciÈèÆ para saber el tamaÈö≥ de un conjunto
             if (ctx.IDENTIFICADOR().getText().equals("tamano")) {
                 if (aux.esVector() || aux.esMatriz())
                     return new Valor(aux.aVector().size());
             }
 
-            //Funciones trigonomÈtricas
+            //Funciones trigonomÂΩãricas
             if (ctx.IDENTIFICADOR().getText().equals("abs")) {
                 if (aux.esDouble())
                     return new Valor(Math.abs(aux.aDouble()));
@@ -204,7 +228,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                     return new Valor(Complejo.cot(aux.aComplejo()));
             }
 
-            //FunciÛn de subcadena
+            //Funcion de subcadena
             if (ctx.IDENTIFICADOR().getText().equals("subcadena")) {
                 return new Valor(aux.aString().substring((int) Double.parseDouble(this.visit(ctx.lista_parsv().expresion(1)).toString()), (int) Double.parseDouble(this.visit(ctx.lista_parsv().expresion(2)).toString())));
             }
@@ -239,7 +263,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                 return obj;
             }
 
-            //FunciÛn para leer un archivo
+            //FunciÈèÆ para leer un archivo
             if (ctx.IDENTIFICADOR().getText().equals("leerArchivo")) {
                 try (Stream<String> lineas = Files.lines(Paths.get(this.visit(ctx.lista_parsv().expresion(0)).toString()))) {
                     String valor = lineas.skip(this.visit(ctx.lista_parsv().expresion(1)).aDouble().longValue()).findFirst().get();
@@ -258,22 +282,22 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                     }
                     return new Valor(valor);
                 } catch (Exception e) {
-                    System.err.println("°Archivo no encontrado o lÌnea no encontrada!");
+                    System.err.println("Ôºårchivo no encontrado o lÁíØea no encontrada!");
                 }
                 return new Valor(null);
             }
 
-            //FunciÛn para conocer el n˙mero de lÌneas de un archivo
+            //FunciÈèÆ para conocer el nÓÄ≠ero de lÁíØeas de un archivo
             if (ctx.IDENTIFICADOR().getText().equals("tamanoArchivo")) {
                 return tamanoArchivo(this.visit(ctx.lista_parsv().expresion(0)).toString());
             }
 
-            //FunciÛn que genera n˙meros aleatorios uniformes
+            //FunciÈèÆ que genera nÓÄ≠eros aleatorios uniformes
             if (ctx.IDENTIFICADOR().getText().equals("aleatorio")) {
                 return new Valor(Math.random() * (this.visit(ctx.lista_parsv().expresion(1)).aDouble() - this.visit(ctx.lista_parsv().expresion(0)).aDouble()) + this.visit(ctx.lista_parsv().expresion(0)).aDouble());
             }
 
-            //Si no es una funciÛn predefinida, intenta encontrar una funciÛn creada en tiempo de ejecuciÛn
+            //Si no es una funciÈèÆ predefinida, intenta encontrar una funciÈèÆ creada en tiempo de ejecuciÈèÆ
             int numParametros = 0;
             HashMap<String, Valor> memoria = campo(encontrar(ctx.IDENTIFICADOR().getText()));
             if (memoria.containsKey(ctx.IDENTIFICADOR().getText())) {
@@ -288,7 +312,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                         memoria.put(f.parametros.get(numParametros++), this.visit(ctx.lista_parsv().children.get(i)));
                     }
                     if (numParametros != f.parametros.size()) {
-                        System.out.println("Error: recibidos " + numParametros + " par·metros de " + f.parametros.size());
+                        System.out.println("Error: recibidos " + numParametros + " parÂ´•etros de " + f.parametros.size());
                         return new Valor(null);
                     }
                     Valor res = null;
@@ -301,10 +325,10 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                     alcanceActual--;
                     return res;
                 } catch (Exception e) {
-                    System.out.println("FunciÛn no definida " + e );
+                    System.out.println("FunciÈèÆ no definida " + e );
                 }
             } else {
-                System.out.println("FunciÛn o procedimiento no definido");
+                System.out.println("FunciÈèÆ o procedimiento no definido");
             }
         }
         //Si es un vector o matriz, lo retorna
@@ -338,7 +362,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de una ProposiciÛn
+    //Visitor de las producciones de una ProposiciÈèÆ
     @Override
     public Valor visitProposicion(DiunisioParser.ProposicionContext ctx) {
         if (ctx.IDENTIFICADOR() != null) {
@@ -380,11 +404,11 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                     writer.print("");
                     writer.close();
                 } catch (FileNotFoundException e) {
-                    System.err.println("°Archivo no encontrado!");
+                    System.err.println("Ôºårchivo no encontrado!");
                 }
                 return new Valor(null);
             }
-            //Llama una funciÛn o procedimiento
+            //Llama una funciÈèÆ o procedimiento
             else {
                 try {
                     int u = 0;
@@ -396,9 +420,10 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                             continue;
                         mem = alcance();
                         mem.put(f.parametros.get(u++), this.visit(ctx.lista_parsv().children.get(i)));
+                        
                     }
                     if (u != f.parametros.size()) {
-                        System.out.println("Error: recibidos " + u + " par·metros de " + f.parametros.size());
+                        System.out.println("Error: recibidos " + u + " parÂ´•etros de " + f.parametros.size());
                         return new Valor(null);
                     }
                     Valor res = null;
@@ -410,12 +435,12 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
                     locales.remove(alcanceActual);
                     alcanceActual--;
                 } catch (Exception e) {
-                    System.out.println("FunciÛn no definida " + e );
+                    System.out.println("FunciÈèÆ no definida " + e );
                 }
                 return new Valor(null);
             }
         }
-        //Retorna la ejecuciÛn de las sentencias de selecciÛn e iteraciÛn
+        //Retorna la ejecuciÈèÆ de las sentencias de selecciÈèÆ e iteraciÈèÆ
         else if (ctx.mientras_senten() != null) {
             return this.visit(ctx.mientras_senten());
         } else if (ctx.asignacion() != null) {
@@ -434,7 +459,11 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         } else if (ctx.fun_senten() != null) {
             return this.visit(ctx.fun_senten());
         }
-        //Si encuentra la sentencia RETORNAR, retorna la expresiÛn
+        else if (ctx.asigvar() != null){
+        	return this.visitAsigvar(ctx.asigvar());
+         }
+        	
+        //Si encuentra la sentencia RETORNAR, retorna la expresiÈèÆ
         else if (ctx.RETORNAR() != null) {
             retornar = true;
             return this.visit(ctx.expresion());
@@ -442,7 +471,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return this.visit(ctx);
     }
 
-    //Visitor de las producciones de una definiciÛn de un Procedimiento
+    //Visitor de las producciones de una definiciÈèÆ de un Procedimiento
     @Override
     public Valor visitProc_senten(DiunisioParser.Proc_sentenContext ctx) {
         FunctionValor funcion = new FunctionValor(null);
@@ -456,7 +485,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de una definiciÛn de FunciÛn
+    //Visitor de las producciones de una definiciÈèÆ de FunciÈèÆ
     @Override
     public Valor visitFun_senten(DiunisioParser.Fun_sentenContext ctx) {
         FunctionValor funcion = new FunctionValor(null);
@@ -467,10 +496,12 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         }
         HashMap<String, Valor> memoria = globales;
         memoria.put(ctx.IDENTIFICADOR().getText(), funcion);
+        System.out.println(globales.size());
+        System.out.println(memoria.size());
         return new Valor(null);
     }
 
-    //Visitor de las producciones de una FunciÛn
+    //Visitor de las producciones de una Funcion
     @Override
     public Valor visitFuncion(DiunisioParser.FuncionContext ctx) {
         alcanceActual++;
@@ -478,7 +509,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return this.visit(ctx.sec_proposiciones());
     }
 
-    //Visitor de las producciones de la selecciÛn SI
+    //Visitor de las producciones de la seleccion SI
     @Override
     public Valor visitSi_senten(DiunisioParser.Si_sentenContext ctx) {
         for (int i = 0; i < ctx.bloque_condicional().size(); i++) {
@@ -498,7 +529,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de la iteraciÛn MIENTRAS
+    //Visitor de las producciones de la iteraciÈèÆ MIENTRAS
     @Override
     public Valor visitMientras_senten(DiunisioParser.Mientras_sentenContext ctx) {
         while (this.visit(ctx.bloque_condicional().expresion()).aBoolean()) {
@@ -510,7 +541,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de la iteraciÛn HACER_MIENTRAS
+    //Visitor de las producciones de la iteraciÈèÆ HACER_MIENTRAS
     @Override
     public Valor visitHacer_mientras_senten(DiunisioParser.Hacer_mientras_sentenContext ctx) {
         do {
@@ -521,7 +552,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de una selecciÛn SELECCIONAR
+    //Visitor de las producciones de una selecciÈèÆ SELECCIONAR
     int l = 0;
     @Override
     public Valor visitCasosGen(DiunisioParser.CasosGenContext ctx) {
@@ -541,7 +572,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return this.visit(ctx.casos());
     }
 
-    //Visitor de las producciones de los casos de una selecciÛn SELECCIONAR
+    //Visitor de las producciones de los casos de una selecciÈèÆ SELECCIONAR
     @Override
     public Valor visitCasosDef(DiunisioParser.CasosDefContext ctx) {
         l = 0;
@@ -551,7 +582,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de una iteraciÛn PARA
+    //Visitor de las producciones de una iteraciÈèÆ PARA
     @Override
     public Valor visitPara_senten(DiunisioParser.Para_sentenContext ctx) {
         int j = 0;
@@ -579,7 +610,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de la creaciÛn de un conjunto
+    //Visitor de las producciones de la creacion de un conjunto
     @Override
     public Valor visitConjunto(DiunisioParser.ConjuntoContext ctx) {
         if (!ctx.getText().contains("{{")) {
@@ -601,10 +632,11 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
     @Override
     public Valor visitVariable(DiunisioParser.VariableContext ctx) {
         HashMap<String, Valor> mem = campo(encontrar(ctx.IDENTIFICADOR().getText()));
+        System.out.println("dasd");
         return mem.get(ctx.IDENTIFICADOR().getText());
     }
 
-    //Visitor de las producciones de la asignaciÛn de un n˙mero
+    //Visitor de las producciones de la asignaciÈèÆ de un nÓÄ≠ero
     @Override
     public Valor visitAsigNum(DiunisioParser.AsigNumContext ctx) {
         String id = ctx.IDENTIFICADOR().getText();
@@ -628,7 +660,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return mem.put(id, valor);
     }
 
-    //Visitor de las producciones de la evaluaciÛn de una expresiÛn
+    //Visitor de las producciones de la evaluaciÈèÆ de una expresiÈèÆ
     @Override
     public Valor visitExpresion(DiunisioParser.ExpresionContext ctx) {
         if (ctx.NO() != null) {
@@ -666,7 +698,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return new Valor(null);
     }
 
-    //Visitor de las producciones de una expresiÛn simple
+    //Visitor de las producciones de una expresiÈèÆ simple
     @Override
     public Valor visitExp_simple(DiunisioParser.Exp_simpleContext ctx) {
         Valor total = new Valor(null);
@@ -733,7 +765,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return total;
     }
 
-    //Visitor de las producciones de un tÈrmino
+    //Visitor de las producciones de un tÂª®mino
     @Override
     public Valor visitTermino(DiunisioParser.TerminoContext ctx) {
         if(ctx.NO() != null) {
@@ -784,7 +816,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return total;
     }
 
-    //FunciÛn para hallar la tabla de sÌmbolos en un alcance dado, lo crea si no existe
+    //FunciÈèÆ para hallar la tabla de sÁí•bolos en un alcance dado, lo crea si no existe
     private HashMap<String, Valor> alcance() {
         if (alcanceActual == 0)
             return globales;
@@ -796,7 +828,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         }
     }
 
-    //FunciÛn para hallar el alcance en que se encuentra una variable almacenada
+    //FunciÈèÆ para hallar el alcance en que se encuentra una variable almacenada
     private int encontrar(String var) {
         int i = alcanceActual;
         HashMap<String, Valor> auxiliar;
@@ -817,7 +849,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return -1;
     }
 
-    //FunciÛn para retornar la tabla de sÌmbolos en un alcance dado
+    //FunciÈèÆ para retornar la tabla de sÁí•bolos en un alcance dado
     private HashMap<String, Valor> campo(int i) {
         if (i == 0)
             return globales;
@@ -825,7 +857,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
             return locales.get(i);
     }
 
-    //FunciÛn para sumar vectores
+    //FunciÈèÆ para sumar vectores
     private ArrayList<Double> sumaV(ArrayList<Double> a, ArrayList<Double> b) {
         ArrayList<Double> res = new ArrayList<>();
         for (int i = 0; i < a.size(); i++) {
@@ -834,7 +866,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return res;
     }
 
-    //FunciÛn para restar vectores
+    //FunciÈèÆ para restar vectores
     private ArrayList<Double> restaV(ArrayList<Double> a, ArrayList<Double> b) {
         ArrayList<Double> res = new ArrayList<>();
         for (int i = 0; i < a.size(); i++) {
@@ -843,7 +875,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return res;
     }
 
-    //FunciÛn para sumar matrices
+    //FunciÈèÆ para sumar matrices
     public ArrayList<ArrayList> suma(ArrayList<ArrayList> a, ArrayList<ArrayList> b) {
         ArrayList<ArrayList> res = new ArrayList<>();
         ArrayList aux;
@@ -857,7 +889,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return res;
     }
 
-    //FunciÛn para restar matrices
+    //FunciÈèÆ para restar matrices
     private ArrayList<ArrayList> resta(ArrayList<ArrayList> a, ArrayList<ArrayList> b) {
         ArrayList<ArrayList> res = new ArrayList<>();
         ArrayList aux;
@@ -871,7 +903,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return res;
     }
 
-    //FunciÛn para hacer el producto cruz entre matricez
+    //FunciÈèÆ para hacer el producto cruz entre matricez
     private ArrayList<ArrayList> producto(ArrayList<ArrayList> a, ArrayList<ArrayList> b) {
         ArrayList<ArrayList> res = new ArrayList<>();
         ArrayList aux;
@@ -898,7 +930,7 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return res;
     }
 
-    //FunciÛn para hacer el producto punto
+    //FunciÈèÆ para hacer el producto punto
     private double punto(ArrayList a, ArrayList b) {
         double res = 0;
         for (int i = 0; i < b.size(); i++){
@@ -907,18 +939,18 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         return res;
     }
 
-    //FunciÛn para escribir un dato en un archivo
+    //FunciÈèÆ para escribir un dato en un archivo
     private void escribirArchivo(String filename, Object dato, boolean sobreescribir) {
         try {
             FileWriter fw = new FileWriter(filename, sobreescribir);
             fw.write(dato + "\n");
             fw.close();
         } catch (IOException ioe) {
-            System.err.println("ESExcepciÛn: " + ioe.getMessage());
+            System.err.println("ESExcepciÈèÆ: " + ioe.getMessage());
         }
     }
 
-    //FunciÛn para conocer el n˙mero de lÌneas de un archivo
+    //FunciÈèÆ para conocer el nÓÄ≠ero de lÁíØeas de un archivo
     private Valor tamanoArchivo(String filename) {
         LineNumberReader lnr = null;
         try {
@@ -938,19 +970,16 @@ public class EvalVisitor extends DiunisioBaseVisitor<Valor> {
         }
         return new Valor((double) (lnr.getLineNumber()));
     }
-   @Override
-public Valor visitDecl_clases(DiunisioParser.Decl_clasesContext ctx) {
-	   String  au  = ctx.FINCLASE().getText();
-	   System.out.println("terminador de clase " + au);
-	   FuncionClase clase = new FuncionClase(null);
-	   
-	   HashMap<String, Valor> memoria = globales;
-      memoria.put(ctx.IDENTIFICADOR().getText(), clase);
-      //System.out.println("desarrollo de la clase");
-       
-    
-      return this.visitSec_proposiciones(ctx.sec_proposiciones());
-	   //return this.visit(ctx.sec_proposiciones());    
-} 
+   
+    @Override
+    public Valor visitAsigvar(AsigvarContext ctx) {
+    	
+    	String a = ctx.IDENTIFICADOR(0).getText();
+    	String b = ctx.IDENTIFICADOR(1).getText();
+    	//String c = ctx.expresion().children;
+    	System.out.println(a);
+    	System.out.println(b);
+    	return new Valor(null);
+    }
 
 }
