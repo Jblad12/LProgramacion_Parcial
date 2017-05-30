@@ -8,10 +8,11 @@ ALGORITMO fibonacciRecursivo(NULL):
 	f=3+a;
 	f=2;
 	si (2<3){
-	imprimirPantalla("valor f: "+f);
+		imprimirPantalla("valor f: "+f);
 	}si_no{
-	imprimirPantalla("unal");
+		imprimirPantalla("unal");
 	}
+	imprimirPantalla("hola2");
 	nu.a = 3;
 }
 .
