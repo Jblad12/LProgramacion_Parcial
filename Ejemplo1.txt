@@ -1,19 +1,20 @@
 ALGORITMO fibonacciRecursivo(NULL):
 {
-	clase nueva{ 
-		a=2;
-		imprimirPantalla(a);
+	clase carro{ 
+		z=0;
+		b=0;
+		carlos = "carlos";
+		def concat (nombre) {
+			imprimirPantalla("Hola " + nombre);
+		}
+		a = concat("Andrés");
 	}_
-	imprimirPantalla("hola2");	
-	f=3+a;
-	f=2;
-	si (2<3){
-		imprimirPantalla("valor f: "+f);
-	}si_no{
-		imprimirPantalla("unal");
+	f=5;
+	m=9;
+	si (m>f){
+		imprimirPantalla(m);
 	}
-	imprimirPantalla("hola2");
-	nu.a = 3;
+	carrfo.z = 3;
 }
 .
 
